@@ -1,11 +1,10 @@
 package com.danny.tasks.controllers;
 
 import com.danny.tasks.domain.dto.TaskListDto;
+import com.danny.tasks.domain.entities.TaskList;
 import com.danny.tasks.mappers.TaskListMapper;
 import com.danny.tasks.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +27,13 @@ public class TaskListController {
                 .map(taskListMapper::toDto)
                 .toList();
     }
+
+    @PostMapping
+    public TaskListDto newTaskList(@RequestBody TaskListDto taskListDto){
+        TaskList createdTaskList = taskListService.createTaskList(
+                taskListMapper.fromDTO(taskListDto)
+        );
+        return  taskListMapper.toDto(createdTaskList);
+    }
+
 }
