@@ -1,12 +1,14 @@
 package com.danny.tasks.services.impl;
 
 import com.danny.tasks.domain.entities.TaskList;
+import com.danny.tasks.exceptions.ResourceNotFoundException;
 import com.danny.tasks.repositories.TaskListRepository;
 import com.danny.tasks.services.TaskListService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,5 +59,24 @@ public class TaskListServiceImpl implements TaskListService {
     @Override
     public Optional<TaskList> getTaskList(UUID id) {
         return taskListRepository.findById(id);
+    }
+
+    @Override
+    public TaskList updateTaskList(UUID taskListId, TaskList taskList) {
+
+        TaskList existingTaskList = taskListRepository.findById(taskListId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task list with ID " + taskListId + " not found"));
+
+        // Only update the title if a new one is provided
+        if (taskList.getTitle() != null && !taskList.getTitle().isBlank()) {
+            existingTaskList.setTitle(taskList.getTitle());
+        }
+
+        // Only update the description if a new one is provided
+        if (taskList.getDescription() != null) {
+            existingTaskList.setDescription(taskList.getDescription());
+        }
+        existingTaskList.setUpdated(LocalDateTime.now());
+        return taskListRepository.save(existingTaskList);
     }
 }
