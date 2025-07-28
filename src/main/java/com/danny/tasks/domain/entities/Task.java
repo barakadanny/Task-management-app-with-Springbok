@@ -32,7 +32,7 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY) //Task list won't be loaded fromDB until it is needed
     @JoinColumn(name="task_list_id")
-    private TaskList tasklist;
+    private TaskList taskList;
 
     @Column(name="created", nullable = false)
     private LocalDateTime created;
@@ -59,7 +59,7 @@ public class Task {
         this.dueDate = dueDate;
         this.status = status;
         this.priority = priority;
-        this.tasklist = tasklist;
+        this.taskList = tasklist;
         this.created = created;
         this.updated = updated;
     }
@@ -113,11 +113,11 @@ public class Task {
     }
 
     public TaskList getTasklist() {
-        return tasklist;
+        return taskList;
     }
 
     public void setTasklist(TaskList tasklist) {
-        this.tasklist = tasklist;
+        this.taskList = tasklist;
     }
 
     public LocalDateTime getCreated() {
@@ -140,12 +140,12 @@ public class Task {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(dueDate, task.dueDate) && status == task.status && priority == task.priority && Objects.equals(tasklist, task.tasklist) && Objects.equals(created, task.created) && Objects.equals(updated, task.updated);
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(description, task.description) && Objects.equals(dueDate, task.dueDate) && status == task.status && priority == task.priority && Objects.equals(taskList, task.taskList) && Objects.equals(created, task.created) && Objects.equals(updated, task.updated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, dueDate, status, priority, tasklist, created, updated);
+        return Objects.hash(id, title, description, dueDate, status, priority, taskList, created, updated);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class Task {
                 ", dueDate=" + dueDate +
                 ", status=" + status +
                 ", priority=" + priority +
-                ", tasklist=" + tasklist +
+                ", tasklist=" + taskList +
                 ", created=" + created +
                 ", updated=" + updated +
                 '}';
