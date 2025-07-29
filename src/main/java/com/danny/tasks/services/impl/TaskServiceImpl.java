@@ -4,6 +4,7 @@ import com.danny.tasks.domain.entities.Task;
 import com.danny.tasks.domain.entities.TaskList;
 import com.danny.tasks.domain.entities.TaskPriority;
 import com.danny.tasks.domain.entities.TaskStatus;
+import com.danny.tasks.exceptions.ResourceNotFoundException;
 import com.danny.tasks.repositories.TaskListRepository;
 import com.danny.tasks.repositories.TaskRepository;
 import com.danny.tasks.services.TaskService;
@@ -66,5 +67,37 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<Task> getTask(UUID taskListId, UUID taskId) {
         return taskRepository.findByTaskListIdAndId(taskListId, taskId);
+    }
+
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+//        boolean exist
+    }
+
+    @Override
+    public Task updateTask(UUID taskListId, UUID taskId, Task task) {
+        Task existingTask = taskRepository.findByTaskListIdAndId(taskListId, taskId)
+                .orElseThrow(()-> new ResourceNotFoundException("Task with Not found!"));
+
+        if(task.getTitle() !=null && !task.getTitle().isBlank()){
+            existingTask.setTitle(task.getTitle());
+        }
+        if(task.getDescription() !=null && !task.getDescription().isBlank()){
+            existingTask.setDescription(task.getDescription());
+        }
+        if (task.getDueDate() != null) {
+            if (task.getDueDate().isBefore(LocalDateTime.now())) {
+                throw new IllegalArgumentException("Due date cannot be in the past.");
+            }
+            existingTask.setDueDate(task.getDueDate());
+        }
+        if (task.getStatus() != null) {
+            existingTask.setStatus(task.getStatus());
+        }
+        if (task.getPriority() != null) {
+            existingTask.setPriority(task.getPriority());
+        }
+        existingTask.setUpdated(LocalDateTime.now());
+        return taskRepository.save(existingTask);
     }
 }
