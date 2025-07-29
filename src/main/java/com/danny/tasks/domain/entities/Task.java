@@ -38,7 +38,7 @@ public class Task {
     private LocalDateTime created;
 
     @Column(name="updated", nullable = false)
-    private LocalDate updated;
+    private LocalDateTime updated;
 
     public Task() {
     }
@@ -52,7 +52,7 @@ public class Task {
             TaskPriority priority,
             TaskList tasklist,
             LocalDateTime created,
-            LocalDate updated) {
+            LocalDateTime updated) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -128,11 +128,11 @@ public class Task {
         this.created = created;
     }
 
-    public LocalDate getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(LocalDate updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 
